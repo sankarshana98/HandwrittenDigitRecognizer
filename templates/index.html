@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MNIST Digit Prediction</title>
+</head>
+<body>
+
+<h2>Upload a handwritten digit image</h2>
+
+<form action="/" method="post" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value="Predict">
+</form>
+
+{% if prediction_text %}
+    <h3>{{ prediction_text }}</h3>
+    <h4>{{ confidence_text }}</h4>
+    <p>{{ prediction_details }}</p>
+
+    <!-- Display uploaded image -->
+   {% if file_name %}
+    <h3>Original Image:</h3>
+    <img src="{{ url_for('static', filename='uploads/' + file_name) }}" alt="Uploaded Image" width="100">
+
+    <h3>Processed Image (Resized & Grayscale):</h3>
+    <img src="{{ url_for('static', filename='uploads/grayscale_' + file_name) }}" alt="Processed Image" width="100">
+
+{% endif %}
+
+{% for feature_map in feature_map_images %}
+    <h3>Feature Map:</h3>
+    <img src="{{ url_for('static', filename=feature_map) }}" alt="Feature Map" width="100">
+{% endfor %}
+
+
+
+
+
+    <!-- Plotly bar graph for predictions -->
+    {% if prediction_details and 'graphJSON' in prediction_details and prediction_details['graphJSON'] %}
+  <div id="plotly-div"></div>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script type="text/javascript">
+      var graphs = JSON.parse('{{ prediction_details["graphJSON"]|tojson|safe }}');
+      Plotly.newPlot('plotly-div', graphs);
+  </script>
+{% endif %}
+
+    
+    <!-- Feedback form -->
+    <form action="/feedback" method="post">
+        <label for="feedback">Was the prediction correct?</label>
+        <select name="feedback" required>
+            <option value="correct">Yes</option>
+            <option value="incorrect">No</option>
+        </select>
+        <label for="correct_label">If incorrect, what's the correct label?</label>
+        <input type="number" name="correct_label" min="0" max="9">
+        <input type="hidden" name="image_file" value="{{ file_name }}">
+        <input type="submit" value="Submit Feedback">
+    </form>
+{% endif %}
+
+</body>
+</html>
