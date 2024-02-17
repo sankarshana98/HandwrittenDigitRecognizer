@@ -1,65 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MNIST Digit Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #555;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .output {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .feature-map {
+            margin-top: 20px;
+        }
+
+        #plotly-div {
+            margin-top: 20px;
+        }
+
+        form[action="/feedback"] {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
 
-<h2>Digit Prediction - MNIST model</h2>
+<h1>MNIST Digit Prediction</h1>
+
+<h2>Digital Artistry through Machine Learning</h2>
 
 <form action="/" method="post" enctype="multipart/form-data">
     <input type="file" name="file">
-    <input type="submit" value="Predict">
+    <input type="submit" value="Enlighten Me">
 </form>
 
-{% if prediction_text %}
-    <h3>{{ prediction_text }}</h3>
-    <h4>{{ confidence_text }}</h4>
-    <p>{{ prediction_details }}</p>
+<div class="output">
+    {% if prediction_text %}
+        <h3>{{ prediction_text }}</h3>
+        <h4>{{ confidence_text }}</h4>
+        <p>{{ prediction_details }}</p>
 
-    <!-- Display uploaded image -->
-   {% if file_name %}
-    <h3>Original Image:</h3>
-    <img src="{{ url_for('static', filename='uploads/' + file_name) }}" alt="Uploaded Image" width="100">
+        <!-- Display uploaded image -->
+       {% if file_name %}
+        <h3>Original Art:</h3>
+        <img src="{{ url_for('static', filename='uploads/' + file_name) }}" alt="Uploaded Image" width="200">
 
-    <h3>Processed Image (Resized & Grayscale):</h3>
-    <img src="{{ url_for('static', filename='uploads/grayscale_' + file_name) }}" alt="Processed Image" width="100">
+        <h3>Processed Masterpiece (Resized & Grayscale):</h3>
+        <img src="{{ url_for('static', filename='uploads/grayscale_' + file_name) }}" alt="Processed Image" width="200">
 
-{% endif %}
+    {% endif %}
 
-{% for feature_map in feature_map_images %}
-    <h3>Feature Map:</h3>
-    <img src="{{ url_for('static', filename=feature_map) }}" alt="Feature Map" width="100">
-{% endfor %}
-
-
-
-
+    {% for feature_map in feature_map_images %}
+        <h3 class="feature-map">Feature Map:</h3>
+        <img src="{{ url_for('static', filename=feature_map) }}" alt="Feature Map" width="200">
+    {% endfor %}
 
     <!-- Plotly bar graph for predictions -->
     {% if prediction_details and 'graphJSON' in prediction_details and prediction_details['graphJSON'] %}
-  <div id="plotly-div"></div>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script type="text/javascript">
-      var graphs = JSON.parse('{{ prediction_details["graphJSON"]|tojson|safe }}');
-      Plotly.newPlot('plotly-div', graphs);
-  </script>
-{% endif %}
+      <div id="plotly-div"></div>
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      <script type="text/javascript">
+          var graphs = JSON.parse('{{ prediction_details["graphJSON"]|tojson|safe }}');
+          Plotly.newPlot('plotly-div', graphs);
+      </script>
+    {% endif %}
 
-    
     <!-- Feedback form -->
     <form action="/feedback" method="post">
-        <label for="feedback">Was the prediction correct?</label>
+        <label for="feedback">Did the algorithm capture the essence?</label>
         <select name="feedback" required>
             <option value="correct">Yes</option>
             <option value="incorrect">No</option>
         </select>
-        <label for="correct_label">If incorrect, what's the correct label?</label>
+        <label for="correct_label">If not, what's the true essence?</label>
         <input type="number" name="correct_label" min="0" max="9">
         <input type="hidden" name="image_file" value="{{ file_name }}">
-        <input type="submit" value="Submit Feedback">
+        <input type="submit" value="Share Wisdom">
     </form>
-{% endif %}
+    {% endif %}
+</div>
 
 </body>
 </html>
