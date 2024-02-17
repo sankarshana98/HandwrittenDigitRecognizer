@@ -74,11 +74,11 @@
 
 <h1>MNIST Digit Prediction</h1>
 
-<h2>Digital Artistry through Machine Learning</h2>
+<h2>Upload handwritten digit image file for prediction</h2>
 
 <form action="/" method="post" enctype="multipart/form-data">
     <input type="file" name="file">
-    <input type="submit" value="Enlighten Me">
+    <input type="submit" value="Predict">
 </form>
 
 <div class="output">
@@ -89,10 +89,10 @@
 
         <!-- Display uploaded image -->
        {% if file_name %}
-        <h3>Original Art:</h3>
+        <h3>Uploaded Image:</h3>
         <img src="{{ url_for('static', filename='uploads/' + file_name) }}" alt="Uploaded Image" width="200">
 
-        <h3>Processed Masterpiece (Resized & Grayscale):</h3>
+        <h3>Processed Image (Resized & Grayscale):</h3>
         <img src="{{ url_for('static', filename='uploads/grayscale_' + file_name) }}" alt="Processed Image" width="200">
 
     {% endif %}
@@ -114,15 +114,15 @@
 
     <!-- Feedback form -->
     <form action="/feedback" method="post">
-        <label for="feedback">Did the algorithm capture the essence?</label>
+        <label for="feedback">Did the algorithm predict correctly?</label>
         <select name="feedback" required>
             <option value="correct">Yes</option>
             <option value="incorrect">No</option>
         </select>
-        <label for="correct_label">If not, what's the true essence?</label>
+        <label for="correct_label">If not, what's the true value?</label>
         <input type="number" name="correct_label" min="0" max="9">
         <input type="hidden" name="image_file" value="{{ file_name }}">
-        <input type="submit" value="Share Wisdom">
+        <input type="submit" value="Feedback">
     </form>
     {% endif %}
 </div>
