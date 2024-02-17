@@ -10,7 +10,8 @@ import json
 from tensorflow.keras.models import Model
 import matplotlib.pyplot as plt
 from tensorflow.keras.optimizers import Adam
-# Ensure the uploads folder exists
+
+
 UPLOAD_FOLDER = './static/uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
@@ -37,7 +38,7 @@ def upload_file():
             file.save(filepath)
             
             # Get the prediction details for the uploaded image
-            prediction_details = predict(filepath)  # Add this line
+            prediction_details = predict(filepath)  
             
             feature_maps = get_feature_maps(filepath)
             # feature_map_images = save_feature_map_images(feature_maps, file.filename)
@@ -61,7 +62,7 @@ def feedback():
     image_file = request.form['image_file']  # Get the image filepath
 
     if feedback_value == "incorrect":
-        correct_label = int(request.form['correct_label'])  # Get the correct label from the frontend
+        correct_label = int(request.form['correct_label'])  
 
         # Load and preprocess the image
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_file)
@@ -83,7 +84,6 @@ def predict(image_path):
     # Extract filename from image_path
     filename = os.path.basename(image_path)
     grayscale_path = os.path.join(app.config['UPLOAD_FOLDER'], 'grayscale_' + filename)
- # change this line to have 'uploads' instead of 'static/uploads'
 
     
     # Save the resized grayscale image temporarily
@@ -102,7 +102,7 @@ def predict(image_path):
         'confidence': predictions[0][class_idx],
         'predictions': predictions[0].tolist(),
         'graphJSON': create_plot(predictions[0]),
-        'grayscale_path': grayscale_path  # This line remains unchanged
+        'grayscale_path': grayscale_path  
     }
     return prediction_details
 
@@ -120,7 +120,6 @@ def create_plot(predictions):
 feature_map_model = Model(inputs=model.input, outputs=model.layers[0].output)
 # Predict an image to get the feature maps
 def get_feature_maps(image_path):
-    # Load, preprocess and reshape the image like before
     img = Image.open(image_path).convert('L')
     img = img.resize((28, 28))
     img_array = np.array(img) / 255.0
