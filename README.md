@@ -6,6 +6,9 @@ This project is a web application that predicts handwritten digits using a train
 - View prediction results including the predicted digit, confidence score, and feature maps.
 - Provide feedback on prediction accuracy to improve and finetune the model.
 
+## Machine Learning model
+The model is a Convolutional Neural Network (CNN) architecture designed for classifying handwritten digits from the MNIST dataset. It consists of convolutional layers followed by average pooling layers for feature extraction, leading to fully connected layers for classification. With data augmentation techniques like rotation, zoom, and shifting applied during training, with the Adam optimizer and categorical cross-entropy loss the model achieves robustness against variations in input images.
+
 ##  Technologies Used
 Python: Backend language for model training and web server.
 
